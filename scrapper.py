@@ -12,16 +12,22 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.edge.service import Service
 
-# data storing
+# imports for data storing
 import json
 import gzip
 
 import requests
 
 
-# main element scraping funciton
+# main element scraping function
 def search(bot, cookies):
-
+    """
+    This function performs the web scraping of restaurant data from the website using Selenium.
+    
+    Args:
+        bot (webdriver): The Selenium WebDriver instance.
+        cookies (dict): A dictionary of cookies to set in the browser session.
+    """
     # stores all data
     restaurant_data = []
     bot.get('https://food.grab.com/sg/en/')  # main url
@@ -43,7 +49,7 @@ def search(bot, cookies):
 
     count = 0   # count hold the last element scrapped!
 
-    for i in range(0, 20):  # change 20 according to the data requirement each loop may get 20 to 30 restaurants!
+    for i in range(0, 20):
 
         i += 1  # loop update
 
@@ -52,7 +58,6 @@ def search(bot, cookies):
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.RestaurantListCol___1FZ8V")))
 
         # scroll to fetch the next batch
-        print(restaurant_element)
         last_restaurant_element = restaurant_elements[-1]
         bot.execute_script(
             "arguments[0].scrollIntoView();", last_restaurant_element)
@@ -156,7 +161,12 @@ def search(bot, cookies):
 
 
 def scrape(cookies):
-
+    """
+    Initializes the Selenium WebDriver and starts the scraping process.
+    
+    Args:
+        cookies (dict): A dictionary of cookies to set in the browser session.
+    """
     # initialize selenium webdriver
     service = Service()
     options = webdriver.ChromeOptions()
